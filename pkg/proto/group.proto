@@ -1,0 +1,52 @@
+syntax = "proto3";
+
+package group;
+
+import "pkg/proto/meeting.proto";
+
+option go_package = "main/pkg/pb/group";
+
+service GroupService {
+  rpc CreateGroup (CreateGroupRequest) returns (Group);
+  rpc AddUserToGroup (AddUserRequest) returns (AddUserResponse);
+  rpc RemoveUserFromGroup (RemoveUserRequest) returns (RemoveUserResponse);
+  rpc ListGroupMeetings (ListGroupMeetingsRequest) returns (ListGroupMeetingsResponse);
+}
+
+message Group {
+  string id = 1;
+  string name = 2;
+  string creator_id = 3;
+  repeated string member_ids = 4;
+}
+
+message CreateGroupRequest {
+  string name = 1;
+  string creator_id = 2;
+}
+
+message AddUserRequest {
+  string group_id = 1;
+  string user_id = 2;
+}
+
+message AddUserResponse {
+  bool success = 1;
+}
+
+message RemoveUserRequest {
+  string group_id = 1;
+  string user_id = 2;
+}
+
+message RemoveUserResponse {
+  bool success = 1;
+}
+
+message ListGroupMeetingsRequest {
+  string group_id = 1;
+}
+
+message ListGroupMeetingsResponse {
+  repeated meeting.Meeting meetings = 1; 
+}

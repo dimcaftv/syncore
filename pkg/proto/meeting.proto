@@ -1,0 +1,94 @@
+syntax = "proto3";
+
+package meeting;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "main/pkg/pb/meeting";
+
+service MeetingService {
+  rpc CreateMeeting (CreateMeetingRequest) returns (Meeting);
+  rpc GetMeeting (GetMeetingRequest) returns (Meeting);
+  rpc ListMeetings (ListMeetingsRequest) returns (ListMeetingsResponse);
+  rpc UpdateMeeting (UpdateMeetingRequest) returns (Meeting);
+  rpc DeleteMeeting (DeleteMeetingRequest) returns (DeleteMeetingResponse);
+
+  rpc InviteUser (InviteRequest) returns (InviteResponse);
+  rpc ConfirmAttendance (ConfirmRequest) returns (ConfirmResponse);
+  rpc ListParticipants (ListParticipantsRequest) returns (ListParticipantsResponse);
+}
+
+message Meeting {
+  int32 id = 1;
+  string title = 2;
+  string description = 3;
+  google.protobuf.Timestamp start_time = 4;
+  google.protobuf.Timestamp end_time = 5;
+  int32 creator_id = 6;
+  repeated int32 member_ids = 7;
+}
+
+message CreateMeetingRequest {
+  string title = 1;
+  string description = 2;
+  google.protobuf.Timestamp start_time = 3;
+  google.protobuf.Timestamp end_time = 4;
+  int32 creator_id = 5;
+}
+
+message GetMeetingRequest {
+  int32 meeting_id = 1;
+}
+
+message ListMeetingsRequest {
+  int32 user_id = 1;
+  google.protobuf.Timestamp start_time = 2;
+  google.protobuf.Timestamp end_time = 3;
+}
+
+message ListMeetingsResponse {
+  repeated Meeting meetings = 1;
+}
+
+message UpdateMeetingRequest {
+  int32 meeting_id = 1;
+  string title = 2;
+  string description = 3;
+  google.protobuf.Timestamp start_time = 4;
+  google.protobuf.Timestamp end_time = 5;
+}
+
+message DeleteMeetingRequest {
+  int32 meeting_id = 1;
+}
+
+message DeleteMeetingResponse {
+  bool success = 1;
+}
+
+message InviteRequest {
+  int32 meeting_id = 1;
+  int32 user_id = 2;
+}
+
+message InviteResponse {
+  bool success = 1;
+}
+
+message ConfirmRequest {
+  int32 meeting_id = 1;
+  int32 user_id = 2;
+  bool will_attend = 3;
+}
+
+message ConfirmResponse {
+  bool success = 1;
+}
+
+message ListParticipantsRequest {
+  int32 meeting_id = 1;
+}
+
+message ListParticipantsResponse {
+  repeated int32 attending_user_ids = 1;
+}
